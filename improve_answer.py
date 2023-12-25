@@ -67,6 +67,7 @@ def _answer_analysis(q, a, content):
                 print(f"An error has occurred. Retrying in 5 seconds. ({retries - retry_count - 1} attempts left)")
     return None
 
+
 if __name__ == '__main__':
     excel_file_path = '/app/services/xxx.xlsx' # xlsx文件需要有 问题、原文和回答3个字段
     answer_check(excel_file_path)
