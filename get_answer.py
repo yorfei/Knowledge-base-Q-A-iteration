@@ -2,11 +2,6 @@ from pd_utils import pd_excel_read,pd_concat
 from llm_chat import ask_llm
 
 
-def get_answer_from_question_and_content(df):
-    df["回答"] = df.apply(lambda x: _get_answer_from_question_and_content(x["问题"], x["原文"],x["来源"]),
-                          axis=1)
-
-
 def question_and_content_excel_to_answer(excel_file_path):
     data = pd_excel_read(excel_file_path)
     df = get_answer_from_question_and_content(data)
@@ -16,6 +11,12 @@ def question_and_content_excel_to_answer(excel_file_path):
         df = pd_concat([df, data])
     df.to_excel(excel_file_path, engine='xlsxwriter')
     return excel_file_path
+
+
+def get_answer_from_question_and_content(df):
+    df["回答"] = df.apply(lambda x: _get_answer_from_question_and_content(x["问题"], x["原文"],x["来源"]),
+                          axis=1)
+
 
 
 def _get_answer_from_question_and_content(question, content,title):
@@ -49,3 +50,8 @@ def _get_answer_from_question_and_content(question, content,title):
     except Exception as e:
         print(result, "++++")
     return result
+
+
+if __name__ == '__main__':
+    excel_file_path = '/app/services/xxx.xlsx' # xlsx文件需要有 问题、原文和来源3个字段
+    question_and_content_excel_to_answer(excel_file_path)

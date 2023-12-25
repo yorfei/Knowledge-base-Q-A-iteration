@@ -16,7 +16,7 @@ def answer_check(excel_file_path):
 
 def answer_analysis(df):
     df[["回答一致性", "修正方案"]] = df.apply(
-        lambda x: pd.Series(_answer_analysis(x["q"], x["a"], x["content"])),
+        lambda x: pd.Series(_answer_analysis(x["问题"], x["回答"], x["原文"])),
         axis=1)
 
 
@@ -66,3 +66,7 @@ def _answer_analysis(q, a, content):
             else:
                 print(f"An error has occurred. Retrying in 5 seconds. ({retries - retry_count - 1} attempts left)")
     return None
+
+if __name__ == '__main__':
+    excel_file_path = '/app/services/xxx.xlsx' # xlsx文件需要有 问题、原文和回答3个字段
+    answer_check(excel_file_path)
