@@ -21,7 +21,6 @@ def answer_analysis(df):
 
 
 def _answer_analysis(q, a, content):
-    # print(prompt, name, desc, welcome)
     prompt = f'''下面是一组问答
     ---
     问题：
@@ -58,7 +57,6 @@ def _answer_analysis(q, a, content):
         try:
             result = json.loads(ask_llm(prompt, channel='Chato'))
             print(result)
-            # print(result["问题相似度"], result["答案相似度"])
             return result["回答一致性"], result["修正方案"]
 
         except:

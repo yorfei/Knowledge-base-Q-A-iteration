@@ -40,7 +40,7 @@ def extract_question(file_path, title=None, url=None):
         contents = [content]
     df_list = []
     for chunk in contents:
-        s_prompt = f'''《口袋方舟》是面向全年龄段的UGC互动内容体验平台,平台提供功能强大的编辑器,便捷易用的特点,让创作者可以轻松制作出任何类型的互动内容,实现想法,发挥创意,与朋友们一起创造多彩的虚拟体验!下面的文本来自于他们的教程文档，主题是{title}，请仔细分析，告诉我这个文本可以回答哪些问题，后续这些问题会作为「口袋方舟」的客服FAQ'''
+        s_prompt = f'''下面的文本来自于xx，主题是{title}，请仔细分析，告诉我这个文本可以回答哪些问题'''
         df = extract_question_from_content(chunk, s_prompt=s_prompt)
         if df is not None:
             df["原文"] = chunk
@@ -74,9 +74,9 @@ def extract_question_from_content(content, retries=3, s_prompt=None):
 
 ---
 注意：
-1. 「口袋方舟」是面向于开发者的，所以问题尽量考虑技术方向
+1.xx
 2.请以json 格式给出可能的问题,问题里不要带“这段对话”““这个文本”“这个”等信息，问题要尽可能的覆盖文本的各个部分
-3.问题最终会作为「口袋方舟」的FAQ给到客服部门，所以我需要用到这个编辑器的游戏开发者会真实问到的问题，问题要具体
+3.yy
 
 {{
 "主要回答的问题":[],
