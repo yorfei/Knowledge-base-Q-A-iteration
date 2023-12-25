@@ -1,89 +1,13 @@
 import json
 import os
-import re
 
 import openai
-import pandas as pd
 import requests
 
-
-def pd_concat(df_list):
-    return pd.concat(df_list)
-
-
-def pd_from_dict(data):
-    return pd.DataFrame.from_dict(data)
-
-
-def read_txt_from_file(file_path):
-    with open(file_path, "r", encoding="utf-8") as f:
-        return f.read()
-
-
-def split_text(text, max_length=1000):
-    sentences = re.split(r'[。]', text)
-    chunks = []
-    chunk = ""
-    for sentence in sentences:
-        if len(chunk) + len(sentence) <= max_length:
-            chunk += sentence
-        else:
-            chunks.append(chunk)
-            chunk = sentence
-    chunks.append(chunk)
-    return chunks
-
-
-def question_json_to_dataframe(json_obj):
-    data = {"问题": [], "标签": []}  # 标签：文中提到的事例/主要回答的问题/还能回答的问题
-    for tag, questions in json_obj.items():
-        data["问题"].extend(questions)
-        data["标签"].extend([tag] * len(questions))
-    return pd_from_dict(data)
-
-
-def ask_llm(content, channel, model=None):
-    # Chato非流式
-    if channel == 'Chato':
-        Slug = 'Chato bot slug'
-        url = f"https://api.chato.cn/chato/api-public/domains/{Slug}/chat"
-        headers = {
-            'Content-Type': 'application/json'
-        }
-        payload = json.dumps({
-            "p": content,
-        })
-        response = requests.request("POST", url, headers=headers, data=payload)
-        return json.loads(response.text)['data']['content']
-
-    # 微软Openai
-    if channel == 'Azure':
-        openai.api_base = "Azure base url"
-        openai.api_key = "Azure Key"
-        openai.api_type = "azure"
-        messages = [
-            {"role": "user", "content": content},
-        ]
-        # print(messages,model)
-        response = openai.ChatCompletion.create(
-            engine=model,
-            messages=messages,
-            temperature=0.1,
-        )
-        return response['choices'][0]['message']['content']
-    # Openai
-    if channel == 'Openai':
-        openai.api_base = "https://api.openai.com/v1/" # 或者用代理地址
-        openai.api_key = "Openai Key"
-        messages = [
-            {"role": "user", "content": content},
-        ]
-        response = openai.ChatCompletion.create(
-            model=model,
-            messages=messages,
-            temperature=0.1,
-        )
-        return response['choices'][0]['message']['content']
+from pd_utils import pd_concat
+from file_utils import read_txt_from_file, split_text
+from data_utils import question_json_to_dataframe
+from llm_chat import ask_llm
 
 
 def directory_files_to_tag_and_question(directory_file, document):
